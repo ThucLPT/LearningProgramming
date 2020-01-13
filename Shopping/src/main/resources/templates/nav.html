@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<nav class="navbar bg-primary sticky-top justify-content-end">
+		<button onclick="location.href='product/create'" class="btn btn-success" sec:authorize="hasRole('ADMIN')">
+			<i class="fa fa-plus"></i>
+		</button>
+
+		<ul class="nav" sec:authorize="!isAuthenticated()">
+			<li class="mx-1">
+				<form>
+					<button th:formaction="@{/register}" class="btn btn-success">
+						Register <i class="fa fa-user-plus"></i>
+					</button>
+				</form>
+			</li>
+			<li class="mx-1">
+				<form>
+					<button th:formaction="@{/login}" class="btn btn-success">
+						Login <i class="fa fa-sign-in"></i>
+					</button>
+				</form>
+			</li>
+		</ul>
+
+		<div class="dropdown mr-5" sec:authorize="isAuthenticated()">
+  			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+  				Hello <span sec:authentication="name"></span>
+  			</button>
+  			<div class="dropdown-menu">
+    			<a class="dropdown-item" th:href="@{/change}">Change password</a>
+    			<form th:action="@{/logout}" method="post">
+					<button type="submit" class="btn btn-block btn-secondary">
+						Logout <i class="fa fa-sign-out"></i>
+					</button>
+				</form>
+  			</div>
+		</div>
+	</nav>
+</body>
+</html>

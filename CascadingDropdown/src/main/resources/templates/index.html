@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="webjars/jquery/3.0.0/jquery.min.js"></script>
+<script th:src="@{script.js}"></script>
+</head>
+<body class="container">
+	<table class="table table-borderless">
+		<tr class="text-center">
+			<th>City</th>
+			<td>
+				<select class="form-control" id="city">
+					<option disabled selected>Select a City</option>
+					<option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
+				</select>
+			</td>
+		</tr>
+		<tr class="text-center">
+			<th>District</th>
+			<td><select class="form-control" id="district"></select></td>
+		</tr>
+		<tr class="text-center">
+			<th>Ward</th>
+			<td><select class="form-control" id="ward"></select></td>
+		</tr>
+	</table>
+</body>
+</html>

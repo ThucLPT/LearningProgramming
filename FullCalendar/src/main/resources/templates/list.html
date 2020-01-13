@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1">
+		<caption>Event List</caption>
+		<tr>
+			<th>Title</th>
+			<th>Start</th>
+			<th>End</th>
+			<th>Option</th>
+		</tr>
+		<tr th:each="event : ${events}">
+			<td th:text="${event.title}"></td>
+			<td th:text="${event.start}"></td>
+			<td th:text="${event.end}"></td>
+			<td>
+				<a th:href="${'update/' + event.id}">Update</a>
+				|
+				<a th:href="${'delete/' + event.id}">Delete</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<form id="searchForm">
+		<div class="input-group">
+			<input type="text" class="form-control" id="myAutocomplete">
+			<div class="input-group-append">
+				<button type="submit" class="btn btn-primary">
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+		</div>
+	</form>
+	<p>
+		<label for="amount">Price range:</label>
+		<input type="text" id="amount" readonly style="border: 0;">
+	</p>
+	<div id="slider-range"></div>
+	<br>
+	<table class="table table-bordered" id="tableProductList">
+		<tr class="text-center" th:each="product : ${products}">
+			<td>
+				<img th:src="${product.img}" height="200px" width="200px">
+				<h3 th:text="${product.name}"></h3>
+				<h4 th:text="${product.price}"></h4>
+				<a class="btn btn-primary" th:href="${'/add/' + product.id}">
+					<i class="fa fa-cart-plus"></i>
+				</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

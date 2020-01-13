@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.4/jquery.rateyo.min.css">
+<script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.4/jquery.rateyo.min.js"></script>
+<script>
+	$(function() {
+		$('#rating').rateYo({
+			fullStar : true,
+			onChange : function(rating, rateYoInstance) {
+				$('#hdrating').val(rating)
+			}
+		});
+	})
+</script>
+</head>
+<body>
+	<div th:replace="nav.html :: nav"></div>
+	<br>
+	<div class="container">
+		<div class="border border-dark text-center">
+			<img th:src="${product.img}" height="400px" width="400px">
+			<h1 th:text="${product.name}"></h1>
+			<h2 th:text="${product.price}"></h2>
+		</div>
+		<br>
+
+		<h5 class="text-center" sec:authorize="!hasRole('USER')">Login to review this product</h5>
+
+		<form th:action="@{/review/save}" method="post" class="border border-dark p-3" th:object="${review}" th:if="${yourReview} == null" sec:authorize="hasRole('USER')">
+			<h5 class="text-center">Leave your rating and comment here</h5>
+			<div class="mx-auto" id="rating"></div><br>
+			<input type="hidden" class="form-control" id="hdrating" th:field="*{star}">
+			<textarea class="form-control" placeholder="Your comment" required th:field="*{comment}" style="resize: none"></textarea><br>
+			<input type="submit" class="btn btn-block btn-primary" value="Send">
+		</form>
+
+		<div class="border border-dark p-3" th:if="${yourReview} != null">
+			<script>
+				$(function() {
+					$('#star').rateYo({
+						rating : [[${yourReview.star}]],
+						readOnly:true
+					});
+				})
+			</script>
+			<h5 class="text-center">You already reviewed this product</h5>
+			<p th:text="${yourReview.user.username}"></p>
+			<p id="star"></p>
+			<p th:text="${yourReview.comment}"></p>
+			<span th:text="${yourReview.date}"></span>
+			<span th:text="${yourReview.time}"></span>
+			<form class="float-right">
+				<button class="btn btn-danger" th:formaction="@{/review/delete}">
+	            	<i class="fa fa-trash"></i>
+	            </button>
+            </form>
+		</div>
+		<br>
+
+		<h5>Ratings and comments from other users</h5>
+		<table class="table table-bordered">
+			<tr th:each="review,iterStat : ${reviews}">
+				<td>
+					<script>
+						$(function() {
+							$('#star'+[[${iterStat.index}]]).rateYo({
+								rating : [[${review.star}]],
+								readOnly:true
+							});
+						})
+					</script>
+					<p th:text="${review.user.username}"></p>
+					<p th:id="star+${iterStat.index}"></p>
+					<p th:text="${review.comment}"></p>
+					<span th:text="${review.date}"></span>
+					<span th:text="${review.time}"></span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

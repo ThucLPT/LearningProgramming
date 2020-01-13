@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<form th:action="@{/update}" method="post">
+		<table class="table table-bordered">
+			<tr class="text-center">
+				<th>Name</th>
+				<th>Price</th>
+				<th>Quantity<br>
+					<button type="submit" class="btn btn-primary" th:if="${session.cart.size() > 0}">Update</button>
+				</th>
+				<th>Total</th>
+				<th>Remove</th>
+			</tr>
+			<tr class="text-center" th:each="item : ${session.cart}">
+				<td th:text="${item.product.name}"></td>
+				<td th:text="${item.product.price}"></td>
+				<td><input type="number" class="form-control" th:value="${item.quantity}" name="quantity" min="1" required></td>
+				<td th:text="${item.product.price * item.quantity}"></td>
+				<td>
+					<a class="btn btn-danger" th:href="${'/remove/' + item.product.id}">
+						<i class="fa fa-remove"></i>
+					</a>
+				</td>
+			</tr>
+			<tr class="text-center">
+				<td colspan="3"></td>
+				<th th:text="${total}"></th>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+	<button onclick="location.href='checkout'" class="btn btn-success" th:if="${session.cart.size() > 0}" sec:authorize="hasRole('USER')">
+		Checkout
+	</button>
+	<a href="login" th:if="${session.cart.size() > 0}" sec:authorize="!hasRole('USER')">
+		Login to checkout
+	</a>
+	<h6 class="text-center" th:if="${session.cart.size() == 0}">Your cart is empty</h6>
+</body>
+</html>
